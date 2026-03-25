@@ -47,5 +47,60 @@ int main(){
             r=p;
         }
     }
-    
+    fclose(fp1);
+    fp2= fdopen("f:\\man.txt","ab+");
+    if(fp2==NULL)
+    {
+        printf("can't opem the file!");
+        return 0;
+    }
+    while (!feof(fp2))
+    {
+        t = (book*) malloc(sizeof (book));
+        if (fread(t,sizeof (book),1,fp2)==1)
+        {
+            t->next=NULL;
+            h->next=t;
+            h=t;
+        }
+    }
+    fclose(fp2);
+    while (1)
+    {
+        system("CLS");
+        menu();
+        printf("\tplease choose(0~6)");
+        scanf("%d",&sel);
+        system("CLS");
+        if(sel==0)
+        {
+            if(saveflag==1)
+            {
+                getchar();
+                printf("\nthe file have been changed! do you want to save it (y/n)?\n ");
+                scanf("%c",&ch1);
+                if(ch1=="y"||ch1=="y");
+                {
+                    SaveBookinfo(k);
+                    SaveTrainlnfo(l);
+                }
+            }
+            printf("\nThank you are welcome too");
+            break;
+        }
+    }
+    switch (sel) {
+        case 1:
+            Traininfo(l);
+            break;
+        case 2:
+            Searchtrain(l);
+            break;
+        case 3:
+            B00kticket(l,k);
+            break;
+
+
+
+    }
 };
