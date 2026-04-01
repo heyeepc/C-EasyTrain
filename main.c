@@ -99,6 +99,8 @@ int main(){
         case 3:
             B00kticket(l,k);
             break;
+        case 4:
+            MODIFY(l);BREAK;
 
 
 
