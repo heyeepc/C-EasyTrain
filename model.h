@@ -29,15 +29,15 @@ struct man {
 };
 
 // --- 链表节点定义 ---
-typedef struct train_node {
+typedef struct Node {
     struct train data;
-    struct train_node *next;
-} TrainNode, *TrainLink;
+    struct Node *next;
+} Node, *Link;
 
-typedef struct man_node {
+typedef struct Man {
     struct man data;
-    struct man_node *next;
-} ManNode, *ManLink;
+    struct Man *next;
+} book, *bookLink;
 
 #endif
 
