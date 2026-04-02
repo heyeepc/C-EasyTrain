@@ -100,9 +100,45 @@ int main(){
             B00kticket(l,k);
             break;
         case 4:
-            MODIFY(l);BREAK;
-
-
-
+            MODIFY(l);
+            break;
+        case 5:
+            showtrain(l);
+            break;
+        case 6:
+            SaveTrainlnfo(l);SaveBookinfo(k);
+            break;
+        case 0:
+            return 0;
     }
+    printf("\nplease press any key to continue");
+    getch();
+
+
 };
+
+void Traininfo(Link linkhead)
+{
+    struct node *p ,*r ,*s;;
+    char num[10];
+    r = linkhead;
+    s = linkhead->next;
+    while (r->next!=NULL)
+        r=r->next;
+    while (1) {
+        printf("please input the number of the train(0-return):");
+        scanf("%s",num);
+        if (strcmp(num,"0")==0)
+            break;
+        while (s) {
+            if (strcmp(s->name,num)==0) {
+                printf("the train ‘%s,is existing !\n",num);
+                return;
+            }
+
+
+            }
+        }
+    }
+
+}
