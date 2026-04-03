@@ -135,6 +135,15 @@ void Traininfo(Link linkhead)
                 printf("the train ‘%s,is existing !\n",num);
                 return;
             }
+            s = s->next;
+        }
+        p = (struct node *)malloc(sizeof(struct node));
+        strcpy(p->date,num,num);
+        printf("input the clit where the train will start");
+        scanf("%s",p->date.startcity);
+        printf("input the city where the train will reach");
+        scanf("%s",p->date.reachcity);
+
 
 
             }
