@@ -126,6 +126,7 @@ void Traininfo(Link linkhead)
     while (r->next!=NULL)
         r=r->next;
     while (1) {
+
         printf("please input the number of the train(0-return):");
         scanf("%s",num);
         if (strcmp(num,"0")==0)
@@ -143,11 +144,24 @@ void Traininfo(Link linkhead)
         scanf("%s",p->date.startcity);
         printf("input the city where the train will reach");
         scanf("%s",p->date.reachcity);
+        printf("input the time which the train take off");
+        scanf("%s",p->date.takeoffime);
+        printf("input the time which the train erceive");
+        scanf("%s",p->date.receivetime);
+        printf("input the price of the train");
+        scanf("%s",p->date.price);
+        printf("input the number of booked tickets:");
+        scanf("%d",&p->data.ticketnum);
+        p->next=NULL;
+        r->next=p;
+        r=p;
+        saveflag=1;
 
 
 
-            }
-        }
+
+
+
     }
 
 }
