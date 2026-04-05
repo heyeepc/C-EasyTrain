@@ -156,12 +156,20 @@ void Traininfo(Link linkhead)
         r->next=p;
         r=p;
         saveflag=1;
+    }
+}
 
-
-
-
-
+void searchtrain(Link I) {
+    Node *S[10],*R;
+    int sel,k,i=0;
+    char str1[5],str2[10];
+    if (!I->next) {
+        printf("there is not any record!");
+        return ;
+    }
+    printf("choose the way:\n1:according to the number of train ;\n2:according to the city \n ");
+    scanf("%d",&sel);
+    if (sel==1) {
 
     }
-
 }
