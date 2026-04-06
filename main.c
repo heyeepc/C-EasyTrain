@@ -170,6 +170,41 @@ void searchtrain(Link I) {
     printf("choose the way:\n1:according to the number of train ;\n2:according to the city \n ");
     scanf("%d",&sel);
     if (sel==1) {
-
+        printf("input the number of the train :");
+        scanf("%d",&str1);
+        r=I->next;
+        while (r!=NULL) {
+            if (strcmp(r->date.num,str1)==0) {
+                s[i]=r;
+                i++;
+                break;
+            }
+            else
+                r=r->next;
+        }
+    }
+    else if (sel==2) {
+        printf("input the city you want to go: ");
+        scanf("%s",str2);
+        r=I->next;
+        while (r!=NULL)
+            if (strcmp(r->date.startcity,str2)==0) {
+                s[i]=r;
+                i++;
+                r=r->next;
+            }
+            else
+                r=r->next;
+    }
+    if (i==0)
+        printf("can not find!");
+    else {
+        printheader();
+        for (k=0;k<i;k++);
+        printdata(s[k]);
     }
 }
+
+
+
+
