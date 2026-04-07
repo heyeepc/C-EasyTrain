@@ -6,7 +6,6 @@
 
 int saveflag = 0; // 全局变量定义
 
-// ... 你的 menu, printheader, printdata 函数放在这里 ...
 void menu()
 {
     puts("\n\n");
@@ -73,7 +72,7 @@ void printdata(Node *p) {
 }
 
 void searchtrain(Link I) {
-    Node *S[10],*R;
+    Node *s[10],*r;
     int sel,k,i=0;
     char str1[5],str2[10];
     if (!I->next) {
@@ -87,7 +86,7 @@ void searchtrain(Link I) {
         scanf("%d",&str1);
         r=I->next;
         while (r!=NULL) {
-            if (strcmp(r->date.num,str1)==0) {
+            if (strcmp(r->data.num,str1)==0) {
                 s[i]=r;
                 i++;
                 break;
@@ -101,7 +100,7 @@ void searchtrain(Link I) {
         scanf("%s",str2);
         r=I->next;
         while (r!=NULL)
-            if (strcmp(r->date.startcity,str2)==0) {
+            if (strcmp(r->data.startcity,str2)==0) {
                 s[i]=r;
                 i++;
                 r=r->next;
@@ -167,8 +166,8 @@ int main() {
                 printf("\nFile changed! Save it? (y/n): ");
                 scanf(" %c", &ch1); // 注意 %c 前有一个空格，用来消耗回车
                 if (ch1 == 'y' || ch1 == 'Y') { // 必须用单引号
-                    SaveTrainInfo(l); // 确保函数名拼写一致
-                    SaveBookInfo(k);
+                   // SaveTrainInfo(l); // 确保函数名拼写一致
+                   // SaveBookInfo(k);
                 }
             }
             printf("\nThank you for using!\n");
@@ -179,8 +178,8 @@ int main() {
         switch (sel) {
             case 1: Traininfo(l); break;
             case 2: searchtrain(l); break;
-            case 3: B00kticket(l, k); break;
-            case 5: showtrain(l); break;
+           // case 3: B00kticket(l, k); break;
+          //  case 5: showtrain(l); break;
             case 6: /* 执行保存逻辑 */; break;
             default: printf("Invalid choice!"); break;
         }
