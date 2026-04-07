@@ -187,34 +187,34 @@ int main(){
             }
             printf("\nThank you are welcome too");
             break;
+            
         }
-    }
-    switch (sel) {
-        case 1:
-            Traininfo(l);
-            break;
-        case 2:
-            Searchtrain(l);
-            break;
-        case 3:
-            B00kticket(l,k);
-            break;
-        case 4:
-            MODIFY(l);
-            break;
-        case 5:
-            showtrain(l);
-            break;
-        case 6:
-            SaveTrainlnfo(l);SaveBookinfo(k);
-            break;
-        case 0:
-            return 0;
+
+        switch (sel) {
+            case 1:
+                Traininfo(l);
+                break;
+            case 2:
+                Searchtrain(l);
+                break;
+            case 3:
+                B00kticket(l,k);
+                break;
+            case 4:
+                MODIFY(l);
+                break;
+            case 5:
+                showtrain(l);
+                break;
+            case 6:
+                SaveTrainlnfo(l);SaveBookinfo(k);
+                break;
+            case 0:
+                return 0;
+        }
     }
     printf("\nplease press any key to continue");
     getch();
-
-
 };
 
 
