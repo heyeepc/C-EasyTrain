@@ -117,6 +117,57 @@ void searchtrain(Link I) {
     }
 }
 
+void Bookticket(Link l,bookLink k) {
+    Node *r[10],*p;
+    char ch[2],tnum[10],str[10],str1[10],str2[10];
+    book * q,*h;
+    int i =0,t=0,flag=0,dnum;
+    q = k;
+    while (q->next != NULL) q = q->next;
+    printf("input the city you want to go: ");
+    scanf("%s",str);
+    p = l->next;
+    while (p != NULL) {
+        if (strcmp(p->data.startcity,str) == 0) {
+            r[i]=p;
+            i++;
+
+        }
+        p = p->next;
+    }
+    printf("\n\nthe number of record have %d\n",i);
+    printheader();
+    for (t=0;t<i;t++) {
+        printdata(r[t]);
+        if (i==0)
+            printf("\nSorry!Can't find the train for you!\n");
+        else {
+            printf("\ndo you want to book it? (y/n): \n");
+            scanf(" %c", ch);
+            if (strcmp(ch,"y") == 0 || strcmp(ch,"Y") == 0) {
+                h =(book*)malloc(sizeof(book));
+                printf("input your name:");
+                scanf("%s",str1);
+                strcpy(h->data.name,str1);
+                printf("input your id");
+                scanf("%s",str2);
+                strcpy(h->data.num,str2);
+                printf("please input the number of the train:");
+                scanf("%s",tnum);
+                for (t=0;t<i;t++) {
+                    if (strcmp(h->data.num,tnum) == 0) {
+                        if (r[t]->data.ticketnum<1) {
+
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
 int main() {
     Node *p, *r;
     Link l;
