@@ -117,55 +117,96 @@ void searchtrain(Link I) {
     }
 }
 
-void Bookticket(Link l,bookLink k) {
-    Node *r[10],*p;
-    char ch[2],tnum[10],str[10],str1[10],str2[10];
-    book * q,*h;
-    int i =0,t=0,flag=0,dnum;
+void Bookticket(Link l, bookLink k) {
+    Node *r[10], *p;
+    char ch[10], tnum[10], str[10], str1[10], str2[10]; // 扩大ch数组防止溢出
+    book *q, *h;
+    int i = 0, t = 0, flag = 0, dnum;
+
     q = k;
     while (q->next != NULL) q = q->next;
+
     printf("input the city you want to go: ");
-    scanf("%s",str);
+    scanf("%s", str);
+
+    // 1. 查找匹配的车次
     p = l->next;
     while (p != NULL) {
-        if (strcmp(p->data.startcity,str) == 0) {
-            r[i]=p;
-            i++;
-
+        if (strcmp(p->data.startcity, str) == 0) {
+            if (i < 10) { // 防止数组越界
+                r[i] = p;
+                i++;
+            }
         }
         p = p->next;
     }
-    printf("\n\nthe number of record have %d\n",i);
-    printheader();
-    for (t=0;t<i;t++) {
-        printdata(r[t]);
-        if (i==0)
-            printf("\nSorry!Can't find the train for you!\n");
-        else {
-            printf("\ndo you want to book it? (y/n): \n");
-            scanf(" %c", ch);
-            if (strcmp(ch,"y") == 0 || strcmp(ch,"Y") == 0) {
-                h =(book*)malloc(sizeof(book));
-                printf("input your name:");
-                scanf("%s",str1);
-                strcpy(h->data.name,str1);
-                printf("input your id");
-                scanf("%s",str2);
-                strcpy(h->data.num,str2);
-                printf("please input the number of the train:");
-                scanf("%s",tnum);
-                for (t=0;t<i;t++) {
-                    if (strcmp(h->data.num,tnum) == 0) {
-                        if (r[t]->data.ticketnum<1) {
 
-                        }
-                    }
-                }
-
-            }
-        }
+    // 2. 检查是否找到
+    if (i == 0) {
+        printf("\nSorry! Can't find the train for you!\n");
+        return; // 直接返回
     }
 
+    // 3. 打印查询到的结果
+    printf("\n\nThe number of records found: %d\n", i);
+    printheader();
+    for (t = 0; t < i; t++) {
+        printdata(r[t]);
+    }
+
+    // 4. 询问是否订票
+    printf("\nDo you want to book a ticket? (y/n): ");
+    scanf("%s", ch); // 使用%s更稳健
+
+    if (strcmp(ch, "y") == 0 || strcmp(ch, "Y") == 0) {
+        h = (book*)malloc(sizeof(book));
+        printf("input your name: ");
+        scanf("%s", str1);
+        strcpy(h->data.name, str1);
+
+        printf("input your ID: ");
+        scanf("%s", str2);
+        strcpy(h->data.num, str2);
+
+        printf("please input the number of the train: ");
+        scanf("%s", tnum);
+
+        // 5. 在查找到的数组中匹配具体的车次
+        flag = 0; // 重置标记
+        for (int j = 0; j < i; j++) { // 使用不同的计数器 j
+            if (strcmp(r[j]->data.num, tnum) == 0) { // 注意：这里应该是对比车次号
+                flag = 1;
+                if (r[j]->data.ticketnum < 1) {
+                    printf("Sorry, no ticket available!\n");
+                    free(h); // 释放未使用的内存
+                    return;
+                }
+
+                printf("input the number of tickets to book: ");
+                scanf("%d", &dnum);
+
+                if (dnum > r[j]->data.ticketnum) {
+                    printf("Not enough tickets!\n");
+                } else {
+                    r[j]->data.ticketnum -= dnum;
+                    h->data.bookNum = dnum;
+                    h->next = NULL;
+                    q->next = h;
+                    q = h;
+                    printf("\nLucky! You have booked a ticket.");
+                    saveflag = 1;
+                }
+                break; // 找到并处理后退出循环
+            }
+        }
+
+        if (flag == 0) {
+            printf("Train number error or not in the list!\n");
+            free(h);
+        }
+    }
+    printf("\nPress any key to continue...");
+    getch();
 }
 
 int main() {

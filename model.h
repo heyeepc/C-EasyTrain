@@ -25,7 +25,7 @@ struct train {
 struct man {
     char num[10]; //id
     char name[10];  //姓名
-    int booknum;  // 订的票数
+    int bookNum;  // 订的票数
 };
 
 // --- 链表节点定义 ---
