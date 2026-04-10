@@ -224,11 +224,11 @@ void Modify(Link l) {
         if (ch == 'y'|| ch == 'y') {
             printf("\ninput the number of thr train");
             scanf("%d", &tnum);
-            while (p != NULL) {
-                if (strcmp(p->data.num, tnum) == 0) {
+            while (p != NULL)
+                if (strcmp(p->data.num, tnum) == 0)
                     break;
-                    else
-                        p=p->next;
+                else
+                    p=p->next;
                     if (p)
                     {
                         printf("input new number of train");
@@ -237,8 +237,8 @@ void Modify(Link l) {
                         scanf("%s",&p->data.startcity);
                         printf("input new city the train will go start");
                     }
-                }
-            }
+
+
         }
     }
 }
