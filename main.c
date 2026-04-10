@@ -209,6 +209,40 @@ void Bookticket(Link l, bookLink k) {
     getch();
 }
 
+void Modify(Link l) {
+    Node *p;
+    char tnum[10],ch;
+    p=l->next;
+    if (!p) {
+        printf("\nthere isn;t record for you to modify!");
+        return;
+    }
+    else {
+        printf("\nDo you want to modify a record? (y/n): ");
+        getch();
+        scanf("%s", ch);
+        if (ch == 'y'|| ch == 'y') {
+            printf("\ninput the number of thr train");
+            scanf("%d", &tnum);
+            while (p != NULL) {
+                if (strcmp(p->data.num, tnum) == 0) {
+                    break;
+                    else
+                        p=p->next;
+                    if (p)
+                    {
+                        printf("input new number of train");
+                        scanf("%s",&p->data.num);
+                        printf("input new city the train will start");
+                        scanf("%s",&p->data.startcity);
+                        printf("input new city the train will go start");
+                    }
+                }
+            }
+        }
+    }
+}
+
 int main() {
     Node *p, *r;
     Link l;
@@ -280,5 +314,3 @@ int main() {
     }
     return 0;
 }
-
-
