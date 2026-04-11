@@ -236,9 +236,20 @@ void Modify(Link l) {
                         printf("input new city the train will start");
                         scanf("%s",&p->data.startcity);
                         printf("input new city the train will go start");
+                        scanf("%s",&p->data.reachcity);
+                        printf("input new time the train take off ");
+                        scanf("%s",&p->data.takeofftime);
+                        printf("input new city the train reach ");
+                        scanf("%s",&p->data.receivetime);
+                        printf("input new price of the train");
+                        scanf("%s",&p->data.price);
+                        printf("input new number of people who have booked ticket ");
+                        scanf("%d",&p->data.ticketnum);
+                        saveflag = 1;
                     }
-
-
+            else {
+                printf("\tcan't find record!");
+            }
         }
     }
 }
