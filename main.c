@@ -254,6 +254,22 @@ void Modify(Link l) {
     }
 }
 
+void showtrain(Link l) {
+    N ode *p;
+    p=l->next;
+    printheader();
+    if (l->next == NULL)
+        printf("no records!");
+    else
+        while (p != NULL) {
+            printdata(p);
+            p = p->next;
+            }
+
+}
+
+
+
 int main() {
     Node *p, *r;
     Link l;
