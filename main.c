@@ -255,7 +255,7 @@ void Modify(Link l) {
 }
 
 void showtrain(Link l) {
-    N ode *p;
+    Node *p;
     p=l->next;
     printheader();
     if (l->next == NULL)
@@ -266,6 +266,34 @@ void showtrain(Link l) {
             p = p->next;
             }
 
+}
+
+void SaveTrainlnfo(Link l) {
+    FILE *fp;
+    Node *p;
+    int count = 0,flag = 1;
+    fp = fopen("train.txt", "wb");
+    if (fp == NULL) {
+        printf("the flie can't be opened!");
+        return;
+    }
+    p=l->next;
+    while (p) {
+        if (fwrite(p, sizeof(Node), 1, fp) == 1) {
+            p=p->next;
+            count++;
+        }
+        else {
+            flag = 0;
+            break;
+        }
+
+    }
+    if (flag) {
+        printf("save %d train records!\n", count);
+        saveflag = 0;
+    }
+    fclose(fp);
 }
 
 
