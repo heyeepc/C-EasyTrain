@@ -80,7 +80,7 @@ void searchtrain(Link I) {
         return ;
     }
     printf("choose the way:\n1:according to the number of train ;\n2:according to the city \n ");
-    scanf("%d",&sel);
+    scanf("%s",&str1);
     if (sel==1) {
         printf("input the number of the train :");
         scanf("%d",&str1);
@@ -112,7 +112,7 @@ void searchtrain(Link I) {
         printf("can not find!");
     else {
         printheader();
-        for (k=0;k<i;k++);
+        for (k=0;k<i;k++)
         printdata(s[k]);
     }
 }
@@ -211,47 +211,66 @@ void Bookticket(Link l, bookLink k) {
 
 void Modify(Link l) {
     Node *p;
-    char tnum[10],ch;
-    p=l->next;
+    char tnum[10];
+    char ch;
+
+    p = l->next;
+
     if (!p) {
-        printf("\nthere isn;t record for you to modify!");
+        printf("\nThere is no record to modify!\n");
         return;
     }
-    else {
-        printf("\nDo you want to modify a record? (y/n): ");
-        getch();
-        scanf("%s", ch);
-        if (ch == 'y'|| ch == 'y') {
-            printf("\ninput the number of thr train");
-            scanf("%d", &tnum);
-            while (p != NULL)
-                if (strcmp(p->data.num, tnum) == 0)
-                    break;
-                else
-                    p=p->next;
-                    if (p)
-                    {
-                        printf("input new number of train");
-                        scanf("%s",&p->data.num);
-                        printf("input new city the train will start");
-                        scanf("%s",&p->data.startcity);
-                        printf("input new city the train will go start");
-                        scanf("%s",&p->data.reachcity);
-                        printf("input new time the train take off ");
-                        scanf("%s",&p->data.takeofftime);
-                        printf("input new city the train reach ");
-                        scanf("%s",&p->data.receivetime);
-                        printf("input new price of the train");
-                        scanf("%s",&p->data.price);
-                        printf("input new number of people who have booked ticket ");
-                        scanf("%d",&p->data.ticketnum);
-                        saveflag = 1;
-                    }
-            else {
-                printf("\tcan't find record!");
-            }
-        }
+
+    printf("\nDo you want to modify a record? (y/n): ");
+    scanf(" %c", &ch);
+
+    if (ch != 'y' && ch != 'Y') {
+        return;
     }
+
+    printf("\nInput the train number you want to modify: ");
+    scanf("%9s", tnum);
+
+    // 查找目标节点
+    while (p != NULL) {
+        if (strcmp(p->data.num, tnum) == 0) {
+            break;
+        }
+        p = p->next;
+    }
+
+    if (p == NULL) {
+        printf("\nCan't find the record!\n");
+        return;
+    }
+
+    // 找到了，开始修改
+    printf("\n--- Modify Train Info ---\n");
+
+    printf("New train number: ");
+    scanf("%9s", p->data.num);
+
+    printf("New start city: ");
+    scanf("%9s", p->data.startcity);
+
+    printf("New reach city: ");
+    scanf("%9s", p->data.reachcity);
+
+    printf("New takeoff time: ");
+    scanf("%9s", p->data.takeofftime);
+
+    printf("New receive time: ");
+    scanf("%9s", p->data.receivetime);
+
+    printf("New price: ");
+    scanf("%d", &p->data.price);
+
+    printf("New ticket number: ");
+    scanf("%d", &p->data.ticketnum);
+
+    saveflag = 1;
+
+    printf("\nModify success!\n");
 }
 
 void showtrain(Link l) {
@@ -296,7 +315,33 @@ void SaveTrainlnfo(Link l) {
     fclose(fp);
 }
 
+void SavaBooklnfo(bookLink k) {
+    FILE *fp;
+    book *p;
+    int count = 0,flag = 1;
+    fp = fopen("book.txt", "wb");
+    if (fp == NULL) {
+        printf("the flie can't be opened!");
+        return;
+    }
+    p=k->next;
+    while (p) {
+        if (fwrite(p, sizeof(book), 1, fp) == 1) {
+            p=p->next;
+            count++;
+        }
+        else {
+            flag = 0;
+            break;
+        }
 
+    }
+    if (flag) {
+        printf("save %d book records!\n", count);
+        saveflag = 0;
+    }
+    fclose(fp);
+}
 
 int main() {
     Node *p, *r;
@@ -317,7 +362,7 @@ int main() {
     // --- 文件读取逻辑 (建议改用 fopen) ---
     FILE *fp1 = fopen("train.txt", "rb+");
     if (fp1 != NULL) {
-        while (!feof(fp1)) {
+        while (fread(p, sizeof(Node), 1, fp1) == 1) {
             p = (Node*)malloc(sizeof(Node));
             if (fread(p, sizeof(Node), 1, fp1) == 1) {
                 p->next = NULL;
@@ -359,8 +404,8 @@ int main() {
         switch (sel) {
             case 1: Traininfo(l); break;
             case 2: searchtrain(l); break;
-           // case 3: B00kticket(l, k); break;
-          //  case 5: showtrain(l); break;
+            case 3: Bookticket(l, k); break;
+            case 5: showtrain(l); break;
             case 6: /* 执行保存逻辑 */; break;
             default: printf("Invalid choice!"); break;
         }
