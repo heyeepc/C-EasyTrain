@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+
 // --- 界面显示模板 ---
 #define HEADER1 "------------ BOOK TICKET --------------\n"
 #define HEADER2 "| number | start city | reach city | takeofftime | receivetime | price | ticketnumber |\n"
@@ -38,6 +40,26 @@ typedef struct Man {
     struct man data;
     struct Man *next;
 } book, *bookLink;
+
+
+// --- 外部全局变量声明 ---
+extern int saveflag;
+
+// --- 车次管理函数 ---
+void Traininfo(Link linkhead);
+void searchtrain(Link l);
+void showtrain(Link l);
+void Modify(Link l);
+void SaveTrainlnfo(Link l);
+
+// --- 订票管理函数 ---
+void Bookticket(Link l, bookLink k);
+void SavaBooklnfo(bookLink k);
+
+// --- 辅助显示 ---
+void printheader();
+void printdata(Node *p);
+
 
 #endif
 
