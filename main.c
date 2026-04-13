@@ -45,7 +45,7 @@ void Traininfo(Link linkhead) {
         }
         if (exists) continue;
 
-        p = (Node *)malloc(sizeof(Node));
+        p = (Node *)malloc(sizeof(struct train));
         strcpy(p->data.num, num); // 修正拼写和参数
 
         printf("Start City: "); scanf("%s", p->data.startcity);
@@ -71,49 +71,52 @@ void printdata(Node *p) {
     printf(FORMAT, DATA);
 }
 
-void searchtrain(Link I) {
-    Node *s[10],*r;
-    int sel,k,i=0;
-    char str1[5],str2[10];
-    if (!I->next) {
-        printf("there is not any record!");
-        return ;
+void searchtrain(Link l) {
+    Node *p;
+    char search_key[20];
+    int sel, found = 0;
+
+    if (l->next == NULL) {
+        printf("\nThere is no record to search!\n");
+        return;
     }
-    printf("choose the way:\n1:according to the number of train ;\n2:according to the city \n ");
-    scanf("%s",&str1);
-    if (sel==1) {
-        printf("input the number of the train :");
-        scanf("%d",&str1);
-        r=I->next;
-        while (r!=NULL) {
-            if (strcmp(r->data.num,str1)==0) {
-                s[i]=r;
-                i++;
-                break;
-            }
-            else
-                r=r->next;
+
+    printf("\nChoose search method:\n1: By Train Number\n2: By Start City\nYour choice: ");
+    if (scanf("%d", &sel) != 1) {
+        while (getchar() != '\n'); // 清理非法输入
+        return;
+    }
+
+    if (sel == 1) {
+        printf("Input the train number: ");
+        scanf("%s", search_key);
+    } else if (sel == 2) {
+        printf("Input the start city: ");
+        scanf("%s", search_key);
+    } else {
+        printf("Invalid choice!\n");
+        return;
+    }
+
+    p = l->next;
+    printheader(); // 先打印表头
+
+    while (p != NULL) {
+        int match = 0;
+        if (sel == 1 && strcmp(p->data.num, search_key) == 0) match = 1;
+        if (sel == 2 && strcmp(p->data.startcity, search_key) == 0) match = 1;
+
+        if (match) {
+            printdata(p);
+            found++;
         }
+        p = p->next;
     }
-    else if (sel==2) {
-        printf("input the city you want to go: ");
-        scanf("%s",str2);
-        r=I->next;
-        while (r!=NULL)
-            if (strcmp(r->data.startcity,str2)==0) {
-                s[i]=r;
-                i++;
-                r=r->next;
-            }
-            else
-                r=r->next;
-    }
-    if (i==0)
-        printf("can not find!");
-    else {
-        printheader();
-        for (k=0;k<i;k++)
-        printdata(s[k]);
+
+    if (found == 0) {
+        printf("\nNo matching records found!\n");
+    } else {
+        printf("\nTotal %d records found.\n", found);
     }
 }
 
@@ -290,29 +293,30 @@ void showtrain(Link l) {
 void SaveTrainlnfo(Link l) {
     FILE *fp;
     Node *p;
-    int count = 0,flag = 1;
+    int count = 0;
+
+    // 使用 "wb" (二进制写入) 模式
     fp = fopen("train.txt", "wb");
     if (fp == NULL) {
-        printf("the flie can't be opened!");
+        printf("\nError: The file 'train.txt' could not be opened for writing!\n");
         return;
     }
-    p=l->next;
-    while (p) {
-        if (fwrite(p, sizeof(Node), 1, fp) == 1) {
-            p=p->next;
+
+    p = l->next;
+    while (p != NULL) {
+        // 【关键改动】只写入 struct train data 部分，不要写入整个 Node (含 next 指针)
+        if (fwrite(&(p->data), sizeof(struct train), 1, fp) == 1) {
             count++;
-        }
-        else {
-            flag = 0;
+            p = p->next;
+        } else {
+            printf("\nError occurred while writing to file!\n");
             break;
         }
+    }
 
-    }
-    if (flag) {
-        printf("save %d train records!\n", count);
-        saveflag = 0;
-    }
     fclose(fp);
+    printf("\nSuccessfully saved %d train records!\n", count);
+    saveflag = 0; // 保存后重置修改标记
 }
 
 void SavaBooklnfo(bookLink k) {
@@ -362,14 +366,15 @@ int main() {
     // --- 文件读取逻辑 (建议改用 fopen) ---
     FILE *fp1 = fopen("train.txt", "rb+");
     if (fp1 != NULL) {
-        while (fread(p, sizeof(Node), 1, fp1) == 1) {
+        while (1) {
             p = (Node*)malloc(sizeof(Node));
             if (fread(p, sizeof(Node), 1, fp1) == 1) {
                 p->next = NULL;
                 r->next = p;
                 r = p;
             } else {
-                free(p); // 读取失败释放内存
+                free(p);
+                break;// 读取失败释放内存
             }
         }
         fclose(fp1);
