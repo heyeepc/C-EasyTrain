@@ -21,6 +21,16 @@ void menu()
     puts("\t\t|----------------------------------------------------------------------|");
 }
 
+void printheader() {
+    printf(HEADER1); // 这里的 HEADER1 展开后自带引号
+    printf(HEADER2);
+}
+
+void printdata(Node *p) {
+    // DATA 宏会自动展开为 p->data.num, p->data.startcity...
+    printf(FORMAT, DATA);
+}
+
 void Traininfo(Link linkhead) {
     Node *p, *r;
     char num[10];
@@ -61,14 +71,18 @@ void Traininfo(Link linkhead) {
     }
 }
 
-void printheader() {
-    printf(HEADER1); // 这里的 HEADER1 展开后自带引号
-    printf(HEADER2);
-}
+void showtrain(Link l) {
+    Node *p;
+    p=l->next;
+    printheader();
+    if (l->next == NULL)
+        printf("no records!");
+    else
+        while (p != NULL) {
+            printdata(p);
+            p = p->next;
+        }
 
-void printdata(Node *p) {
-    // DATA 宏会自动展开为 p->data.num, p->data.startcity...
-    printf(FORMAT, DATA);
 }
 
 void searchtrain(Link l) {
@@ -118,6 +132,99 @@ void searchtrain(Link l) {
     } else {
         printf("\nTotal %d records found.\n", found);
     }
+}
+
+void Modify(Link l) {
+    Node *p;
+    char tnum[10];
+    char ch;
+
+    p = l->next;
+
+    if (!p) {
+        printf("\nThere is no record to modify!\n");
+        return;
+    }
+
+    printf("\nDo you want to modify a record? (y/n): ");
+    scanf(" %c", &ch);
+
+    if (ch != 'y' && ch != 'Y') {
+        return;
+    }
+
+    printf("\nInput the train number you want to modify: ");
+    scanf("%9s", tnum);
+
+    // 查找目标节点
+    while (p != NULL) {
+        if (strcmp(p->data.num, tnum) == 0) {
+            break;
+        }
+        p = p->next;
+    }
+
+    if (p == NULL) {
+        printf("\nCan't find the record!\n");
+        return;
+    }
+
+    // 找到了，开始修改
+    printf("\n--- Modify Train Info ---\n");
+
+    printf("New train number: ");
+    scanf("%9s", p->data.num);
+
+    printf("New start city: ");
+    scanf("%9s", p->data.startcity);
+
+    printf("New reach city: ");
+    scanf("%9s", p->data.reachcity);
+
+    printf("New takeoff time: ");
+    scanf("%9s", p->data.takeofftime);
+
+    printf("New receive time: ");
+    scanf("%9s", p->data.receivetime);
+
+    printf("New price: ");
+    scanf("%d", &p->data.price);
+
+    printf("New ticket number: ");
+    scanf("%d", &p->data.ticketnum);
+
+    saveflag = 1;
+
+    printf("\nModify success!\n");
+}
+
+void SaveTrainlnfo(Link l) {
+    FILE *fp;
+    Node *p;
+    int count = 0;
+
+    // 使用 "wb" (二进制写入) 模式
+    fp = fopen("train.txt", "wb");
+    if (fp == NULL) {
+        printf("\nError: The file 'train.txt' could not be opened for writing!\n");
+        return;
+    }
+
+    p = l->next;
+    while (p != NULL) {
+        // 【关键改动】只写入 struct train data 部分，不要写入整个 Node (含 next 指针)
+        if (fwrite(&(p->data), sizeof(struct train), 1, fp) == 1) {
+            count++;
+            p = p->next;
+        } else {
+            printf("\nError occurred while writing to file!\n");
+            break;
+        }
+    }
+
+    fclose(fp);
+    printf("\nSuccessfully saved %d train records!\n", count);
+    saveflag = 0; // 保存后重置修改标记
 }
 
 void Bookticket(Link l, bookLink k) {
@@ -210,113 +317,6 @@ void Bookticket(Link l, bookLink k) {
     }
     printf("\nPress any key to continue...");
     getch();
-}
-
-void Modify(Link l) {
-    Node *p;
-    char tnum[10];
-    char ch;
-
-    p = l->next;
-
-    if (!p) {
-        printf("\nThere is no record to modify!\n");
-        return;
-    }
-
-    printf("\nDo you want to modify a record? (y/n): ");
-    scanf(" %c", &ch);
-
-    if (ch != 'y' && ch != 'Y') {
-        return;
-    }
-
-    printf("\nInput the train number you want to modify: ");
-    scanf("%9s", tnum);
-
-    // 查找目标节点
-    while (p != NULL) {
-        if (strcmp(p->data.num, tnum) == 0) {
-            break;
-        }
-        p = p->next;
-    }
-
-    if (p == NULL) {
-        printf("\nCan't find the record!\n");
-        return;
-    }
-
-    // 找到了，开始修改
-    printf("\n--- Modify Train Info ---\n");
-
-    printf("New train number: ");
-    scanf("%9s", p->data.num);
-
-    printf("New start city: ");
-    scanf("%9s", p->data.startcity);
-
-    printf("New reach city: ");
-    scanf("%9s", p->data.reachcity);
-
-    printf("New takeoff time: ");
-    scanf("%9s", p->data.takeofftime);
-
-    printf("New receive time: ");
-    scanf("%9s", p->data.receivetime);
-
-    printf("New price: ");
-    scanf("%d", &p->data.price);
-
-    printf("New ticket number: ");
-    scanf("%d", &p->data.ticketnum);
-
-    saveflag = 1;
-
-    printf("\nModify success!\n");
-}
-
-void showtrain(Link l) {
-    Node *p;
-    p=l->next;
-    printheader();
-    if (l->next == NULL)
-        printf("no records!");
-    else
-        while (p != NULL) {
-            printdata(p);
-            p = p->next;
-            }
-
-}
-
-void SaveTrainlnfo(Link l) {
-    FILE *fp;
-    Node *p;
-    int count = 0;
-
-    // 使用 "wb" (二进制写入) 模式
-    fp = fopen("train.txt", "wb");
-    if (fp == NULL) {
-        printf("\nError: The file 'train.txt' could not be opened for writing!\n");
-        return;
-    }
-
-    p = l->next;
-    while (p != NULL) {
-        // 【关键改动】只写入 struct train data 部分，不要写入整个 Node (含 next 指针)
-        if (fwrite(&(p->data), sizeof(struct train), 1, fp) == 1) {
-            count++;
-            p = p->next;
-        } else {
-            printf("\nError occurred while writing to file!\n");
-            break;
-        }
-    }
-
-    fclose(fp);
-    printf("\nSuccessfully saved %d train records!\n", count);
-    saveflag = 0; // 保存后重置修改标记
 }
 
 void SavaBooklnfo(bookLink k) {
